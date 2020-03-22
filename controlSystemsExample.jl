@@ -39,3 +39,43 @@ function motorSimulation()
     stepplot(CLs, label=["Kp = 1" "Kp = 5" "Kp = 15"])
 
 end
+
+function rootLocusTest(isKpositive::Bool)
+    # Set reverse pendulum parameters
+    g = 9.81
+    l = 1
+    k = isKpositive ? range(1e-6, stop=10.0; length=100) : range(-1e-6, stop=-10.0; length=100)
+    ksignal = isKpositive ? '>' : '<'
+    zc = sqrt(g/l)
+    pc = 13.67
+    # kpos = range(1e-6, stop=100.0; length=100);
+    # kneg = range(-1e-6,stop=-100;length=100);
+    # G(s) = [XG(s)]/[X(s)]
+    s = tf("s");
+    G = (-g/l)/(s^2 - g/l)
+    Gc = -(s + zc)/(s + pc)
+
+    # rlocusplot(G,K=kpos,label="K > 0")
+    rlocusplot(Gc*G, K=k, label = "K $ksignal 0")
+
+end
+
+function nicholsPlotTest()
+    # Set reverse pendulum parameters
+    g = 9.81
+    l = 0.15
+    # G(s) = [XG(s)]/[X(s)]
+    G = tf(g/l, [1, 0, g/l])
+
+    nicholsplot(G)
+end
+
+function nyquistPlotTest()
+    # Set reverse pendulum parameters
+    g = 9.81
+    l = 0.15
+    # G(s) = [XG(s)]/[X(s)]
+    G = tf(g/l, [1, 0, g/l])
+
+    nyquistplot(G)
+end
