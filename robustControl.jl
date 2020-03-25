@@ -1,9 +1,9 @@
+using Plots;
 using ControlSystems;
-using Plots
 
 function simulatePlant()
     # Define helper laplace operator
-    s = tf("s")
+    s = tf("s");
 
     # Define pendulum parameters and Transfer function
     g = 9.81
@@ -23,8 +23,22 @@ function simulatePlant()
     Gma = Gc * Gp
     Gmf = (Gc * Gp) / (1 + Gc * Gp)
 
-    nyquistplot(Gma)
-    savefig("~/Desktop/GmaPlot.png")
-    nyquistplot(Gp)
-    savefig("~/Desktop/GpPlot.png")
+    rlocusplot(Gp,title = "Root Locus Gp(s)")
+    savefig("~/Desktop/GpRLocusPlot.png")
+    nyquistplot(Gp, title = "Nyquist Diagram Gp(s)")
+    savefig("~/Desktop/GpNyquistPlot.png")
+
+    rlocusplot(Gma,title = "Root Locus Gma(s)")
+    savefig("~/Desktop/GmaRLocusPlot.png")
+    nyquistplot(Gma, title = "Nyquist Diagram Gma(s)")
+    savefig("~/Desktop/GmaNyquistPlot.png")
+
+    setPlotScale("dB")
+    w = range(1.0; stop=1e4,step=1e-1);
+    bodeplot(Gma,w, title = "Bode Diagram Gma(s)")
+    savefig("~/Desktop/GmaBodePlot.png")
+    marginplot(Gma,w)
+    savefig("~/Desktop/GmaMarginPlot.png")
+
+
 end
